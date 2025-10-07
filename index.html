@@ -1,0 +1,571 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>[GROUP_NAME] — Terminal Welcome</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#0d1117;
+      --text:#c9d1d9;
+      --text-muted:#8b949e;
+      --accent:#1f6feb;
+      --panel:#161b22;
+      --danger:#f85149;
+      --warning:#d29922;
+      --terminal-bg:#010409;
+      --terminal-text:#58a6ff;
+      --terminal-text-muted:#8b949e;
+      --card-bg:#161b22;
+      --card-border:#30363d;
+    }
+    *{box-sizing:border-box;}
+    html, body {
+      margin:0; padding:28px; height:100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "JetBrains Mono", "Share Tech Mono", monospace;
+      line-height:1.5;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Layout */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 24px;
+      align-items: start;
+    }
+    header {
+      margin-bottom: 18px;
+    }
+    .glitch {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--accent);
+      position: relative;
+      letter-spacing: 0.6px;
+      text-shadow:
+        1px 0 var(--accent),
+        -1px 0 var(--accent);
+      user-select:none;
+    }
+    .glitch::before, .glitch::after {
+      content: attr(data-text);
+      position: absolute;
+      left: 0; top: 0;
+      opacity: 0.7;
+      mix-blend-mode: screen;
+    }
+    .glitch::before {
+      color: #79b8ff;
+      transform: translate(2px, -2px);
+      clip-path: inset(0 0 0 0);
+    }
+    .glitch::after {
+      color: #388bfd;
+      transform: translate(-2px, 2px);
+      clip-path: inset(0 0 0 0);
+    }
+    @keyframes glitchShift {
+      0% {transform:translateX(0);}
+      20% {transform:translateX(-2px);}
+      40% {transform:translateX(1px);}
+      60% {transform:translateX(-1px);}
+      80% {transform:translateX(2px);}
+      100%{transform:translateX(0);}
+    }
+    .glitch {
+      animation: glitchShift 2s infinite linear;
+    }
+
+    .meta {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 6px;
+      user-select:none;
+    }
+
+    /* Terminal blocks */
+    .terminal {
+      background: var(--terminal-bg);
+      border: 1px solid var(--card-border);
+      padding: 18px;
+      border-radius: 8px;
+      box-shadow: 0 12px 24px rgba(21, 32, 43, 0.7);
+      min-height: 80px;
+      color: var(--terminal-text);
+      font-size: 14px;
+      line-height: 1.5;
+      user-select: text;
+    }
+    .terminal p {
+      margin: 8px 0;
+    }
+    .terminal .muted {
+      color: var(--terminal-text-muted);
+      font-size: 13px;
+    }
+    .terminal .strong {
+      color: #a5d6ff;
+      font-weight: 700;
+    }
+    .terminal .tiny {
+      font-size: 12px;
+      color: var(--terminal-text-muted);
+    }
+
+    /* Enforcement warning (strong) */
+    .enforce {
+      margin: 14px 0;
+      padding: 14px;
+      border-radius: 8px;
+      background-color: rgba(248, 81, 81, 0.15);
+      border: 1px solid rgba(248, 81, 81, 0.35);
+      color: var(--danger);
+      font-weight: 700;
+      box-shadow: 0 6px 18px rgba(248, 81, 81, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      user-select:none;
+    }
+
+    /* Community Rules panel */
+    .rules {
+      margin-top: 14px;
+      padding: 18px;
+      border-radius: 8px;
+      background: var(--panel);
+      border: 1px dashed var(--card-border);
+      color: var(--text-muted);
+      user-select:none;
+    }
+    .rules h3 {
+      margin: 0 0 10px 0;
+      color: var(--accent);
+      font-size: 16px;
+    }
+    .rules ul {
+      margin: 0;
+      padding-left: 20px;
+      list-style-type: disc;
+    }
+    .rules li {
+      margin: 8px 0;
+      line-height: 1.4;
+    }
+
+    /* Right column cards */
+    .side {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Browser card (Uiverse.io style professional) */
+    .browser {
+      width: 100%;
+      height: 230px;
+      background: var(--card-bg);
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+      border: 1px solid var(--card-border);
+      box-shadow: 0 10px 30px rgba(21, 32, 43, 0.75);
+      font-family: "JetBrains Mono", monospace;
+    }
+    .tabs-head {
+      background: #22272e;
+      height: 44px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      padding-left: 16px;
+      color: #c9d1d9;
+      font-size: 13px;
+    }
+    .tabs {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .tab-open {
+      position: relative;
+      background: #313946;
+      border-radius: 8px 8px 0 0;
+      padding: 6px 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: default;
+      user-select:none;
+      color: #c9d1d9;
+      font-size: 13px;
+    }
+    .tab-open .close-tab {
+      color: #8b949e;
+      font-size: 14px;
+      border-radius: 6px;
+      cursor: default;
+      padding: 0 6px;
+      user-select:none;
+    }
+    .tab-open .close-tab:hover {
+      background-color: #444c56;
+      color: #c9d1d9;
+    }
+    .window-opt {
+      display: flex;
+      gap: 6px;
+      margin-right: 12px;
+    }
+    .window-opt button {
+      height: 32px;
+      width: 32px;
+      border-radius: 6px;
+      border: none;
+      background: transparent;
+      color: #c9d1d9;
+      cursor: pointer;
+      transition: background-color 0.15s ease-in-out;
+    }
+    .window-opt button:hover {
+      background-color: #444c56;
+    }
+    .window-opt .window-close:hover {
+      background-color: var(--danger);
+      color: white;
+    }
+    .head-browser {
+      position: absolute;
+      top: 38px;
+      left: 8px;
+      right: 8px;
+      height: 42px;
+      background: #444c56;
+      border-radius: 8px 8px 0 0;
+      padding: 6px 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .head-browser input {
+      flex: 1;
+      height: 28px;
+      border-radius: 16px;
+      border: 2px solid transparent;
+      padding: 0 14px;
+      font-size: 13px;
+      background: #21262d;
+      color: #c9d1d9;
+      outline: none;
+      transition: border-color 0.2s ease-in-out;
+    }
+    .head-browser input:hover {
+      border-color: var(--accent);
+    }
+    .head-browser input:focus {
+      border-color: var(--accent);
+      background: #30363d;
+    }
+    .head-browser input::placeholder {
+      color: #8b949e;
+    }
+    .head-browser button {
+      width: 30px;
+      height: 30px;
+      border: none;
+      background: transparent;
+      color: #c9d1d9;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: background-color 0.2s ease-in-out;
+    }
+    .head-browser button:hover:not(:disabled) {
+      background-color: #444c56;
+    }
+    .head-browser button:disabled {
+      opacity: 0.4;
+      cursor: default;
+    }
+    .head-browser .star {
+      position: absolute;
+      right: 50px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 16px;
+      opacity: 0.7;
+      pointer-events: none;
+      user-select:none;
+    }
+    .browser-body {
+      padding: 100px 16px 16px 16px;
+      color: #8b949e;
+      font-size: 13px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      user-select:none;
+    }
+
+    /* Terminal card (Manish-Tamang style professional) */
+    .term-card {
+      background: var(--terminal-bg);
+      color: var(--terminal-text);
+      padding: 18px;
+      border-radius: 10px;
+      border: 1px solid var(--card-border);
+      font-family: "Share Tech Mono", monospace;
+      box-shadow: 0 8px 30px rgba(21, 32, 43, 0.7);
+      user-select:text;
+      max-width: 380px;
+    }
+    .term-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .term-dots {
+      display: flex;
+      gap: 8px;
+    }
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 9999px;
+    }
+    .dot.red { background: #f85149; }
+    .dot.yellow { background: #d29922; }
+    .dot.green { background: #3fb950; }
+    .term-lines {
+      margin-top: 14px;
+      color: var(--terminal-text);
+      font-size: 14px;
+      line-height: 1.4;
+      white-space: pre-wrap;
+    }
+    .term-lines strong {
+      color: #a5d6ff;
+    }
+    .term-lines .prompt {
+      color: #58a6ff;
+    }
+
+    /* Quick facts card */
+    .quick-facts {
+      background: var(--terminal-bg);
+      border-radius: 8px;
+      padding: 14px;
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      font-size: 13px;
+      line-height: 1.5;
+      max-width: 380px;
+      user-select:none;
+    }
+
+    footer {
+      margin-top: 24px;
+      font-size: 13px;
+      color: var(--text-muted);
+      text-align: center;
+      grid-column: 1 / -1;
+      user-select:none;
+    }
+
+    /* Responsive tweaks */
+    @media(max-width: 980px) {
+      .container {
+        grid-template-columns: 1fr;
+        padding: 10px;
+      }
+      .side {
+        order: 2;
+      }
+      .term-card, .quick-facts, .browser {
+        max-width: 100%;
+      }
+    }
+
+    /* typing cursor animation for .typed */
+    .typed {
+      display: inline-block;
+      border-right: 2px solid rgba(88, 166, 255, 0.6);
+      padding-right: 4px;
+      animation: blink 1s steps(1) infinite;
+      user-select:none;
+    }
+    @keyframes blink {
+      50% { border-color: transparent; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="glitch" data-text="HELLO FRIEND, [USERNAME]">HELLO FRIEND, [USERNAME]</div>
+    <div class="meta tiny">You’ve entered [GROUP_NAME] — Time: [TIME] | Day: [WEEKDAY]</div>
+  </header>
+
+  <main class="container">
+    <!-- Left: Hero + Rules + Media -->
+    <section>
+      <div class="hero">
+        <div class="terminal">
+          <p>Alone in the tech world? You’re not. Not here.</p>
+          <p>We see the code behind the code. We speak in every language… even binary.</p>
+        </div>
+
+        <div class="terminal" style="margin-top: 14px;">
+          <p>Listen carefully. There’s one rule only: Do not hurt others. Break it… and we will know.</p>
+          <p>Trust is fragile. Here, it’s real. Together, we survive. Together, we hack the unknown.</p>
+        </div>
+
+        <div class="enforce" style="font-size: 15px; line-height: 1.3;">
+          <strong>Strict Warning:</strong> Disrespect, abuse, harassment, and any adult or inappropriate content are strictly prohibited. Violators will be identified and banned immediately, with no exceptions. This community values safety, respect, and professionalism.
+        </div>
+
+        <div class="rules">
+          <h3>Community Rules &amp; Ethos</h3>
+          <ul>
+            <li>Respect every member — zero tolerance for abuse, trolling, harassment, or targeted attacks.</li>
+            <li>Keep conversations technical, supportive, and focused on learning, research, or lawful experimentation.</li>
+            <li>Share code and resources responsibly: only legal materials and ethical disclosures here.</li>
+            <li>We welcome open talk — be curious, ask questions, share findings — but remain respectful and ethical.</li>
+            <li>Gender equality matters: every voice is equal here. Harassment based on identity will be acted upon immediately.</li>
+            <li>There are no forced replies — talk when you want. No pressure, but always be courteous and professional.</li>
+            <li>Our backbone: this group uses advanced bot systems that monitor activity, detect malicious/recon behavior, and protect the community.</li>
+            <li>We act fast: violations are logged, reviewed, and enforced (warnings, temp-ban, permanent ban depending on severity).</li>
+            <li>Keep the vibe: supportive, technical, slightly edgy, but always legal and constructive.</li>
+            <li>Have fun. Learn. Share. Build. Be better together.</li>
+          </ul>
+        </div>
+
+        <div class="terminal" style="margin-top: 14px;">
+          <p>Read the rules above carefully. Don’t hesitate to introduce yourself — tell us what you code, what you love, and what you’re learning.</p>
+          <p class="tiny">— [GROUP_NAME] Core</p>
+        </div>
+
+        <!-- Embedded YouTube -->
+        <div style="margin-top:18px;">
+          <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:8px;border:1px solid rgba(255,255,255,0.03)">
+            <!-- Replace video id below with the one you want -->
+            <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Welcome video" style="position:absolute;left:0;top:0;width:100%;height:100%;border:0" allowfullscreen></iframe>
+          </div>
+        </div>
+      </section>
+
+    <!-- Right: Cards and terminals -->
+    <aside class="side">
+      <div class="browser" aria-hidden="true" role="complementary" aria-label="Browser window">
+        <div class="tabs-head">
+          <div class="tabs">
+            <div class="tab-open" tabindex="-1">
+              <div class="rounded-l"><div class="mask-round"></div></div>
+              <span>Welcome</span>
+              <div class="close-tab" aria-hidden="true" tabindex="-1">✕</div>
+              <div class="rounded-r"><div class="mask-round"></div></div>
+            </div>
+          </div>
+
+          <div class="window-opt">
+            <button title="Minimize" type="button" aria-label="Minimize window">–</button>
+            <button title="Maximize" type="button" aria-label="Maximize window">□</button>
+            <button title="Close" class="window-close" type="button" aria-label="Close window">✕</button>
+          </div>
+        </div>
+
+        <div class="head-browser" role="search">
+          <button aria-label="Back" disabled>←</button>
+          <button aria-label="Forward" disabled>→</button>
+
+          <input type="text" placeholder="Search or paste a URL" value="[GROUP_NAME].tg" aria-label="Browser address bar" />
+
+          <button title="Menu" type="button" aria-label="Open menu">⋮</button>
+
+          <button class="star" title="Bookmark" type="button" aria-label="Bookmark this page">✰</button>
+        </div>
+
+        <div class="browser-body">
+          <div>Pinned:</div>
+          <div style="margin-top:6px;">Welcome guide • Rules • How to verify • Bot commands</div>
+          <div style="margin-top:auto;color:#8b949e">From Uiverse.io by arthur_6104 — adapted</div>
+        </div>
+      </div>
+
+      <aside class="term-card" aria-hidden="true" role="complementary" aria-label="Terminal session">
+        <div class="term-top">
+          <div class="term-dots">
+            <div class="dot red"></div>
+            <div class="dot yellow"></div>
+            <div class="dot green"></div>
+          </div>
+          <p class="tiny">bash</p>
+        </div>
+
+        <div class="term-lines">
+          <div><span class="prompt">$</span> welcome --group [GROUP_NAME]</div>
+          <div style="color: #8b949e;">Loading secure channels… OK</div>
+          <div style="color: #8b949e;">Bot backbone status: <strong>active</strong> • monitoring • analytic modules online</div>
+          <div style="margin-top:8px;"><span class="prompt">$</span></div>
+        </div>
+
+        <div style="margin-top:12px;font-size:12px; color: var(--text-muted); user-select:none;">
+          From Uiverse.io by Manish-Tamang — adapted
+        </div>
+      </aside>
+
+      <div class="quick-facts" aria-live="polite" aria-atomic="true">
+        <div>Quick facts</div>
+        <div style="margin-top:8px;">
+          • You are free to talk &amp; share anything acceptable and legal.<br />
+          • We believe in gender equality and positive inclusion.<br />
+          • There are no bounds to talk — but always remain respectable and ethical.<br />
+        </div>
+      </div>
+    </aside>
+
+  </main>
+
+  <footer>
+    This page is for community use — customize [GROUP_NAME] placeholders and video. Build responsibly.
+  </footer>
+
+  <!-- Optional JS for small interactive touches -->
+  <script>
+    (function() {
+      const meta = document.querySelector('.meta');
+      if (!meta) return;
+      const original = meta.textContent;
+      meta.textContent = '';
+      let i = 0;
+      function step() {
+        if (i <= original.length) {
+          meta.textContent = original.slice(0, i) + (i % 2 ? '|' : '');
+          i++;
+          setTimeout(step, 18);
+        } else {
+          meta.textContent = original;
+        }
+      }
+      setTimeout(step, 600);
+    })();
+
+    document.querySelectorAll('.window-opt button, .head-browser button').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        btn.animate([{transform:'scale(1)'}, {transform:'scale(0.96)'}, {transform:'scale(1)'}], {duration: 160});
+      });
+    });
+  </script>
+
+</body>
+</html>
